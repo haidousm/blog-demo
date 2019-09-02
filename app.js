@@ -74,7 +74,8 @@ app.post("/compose", (req, res) => {
   let post = {
 
     title: req.body.postTitle,
-    body: req.body.postBody.substring(0, 100) + " ..."
+    body: req.body.postBody.substring(0, 100) + " ...",
+    link: lodash.kebabCase(req.body.postTitle)
 
   }
 
