@@ -19,18 +19,18 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 mongoose.connect("mongodb://localhost:27017/BlogDemoDB", {
-    useNewUrlParser: true
+  useNewUrlParser: true
 });
 
 const Post = mongoose.model("Post", {
 
-    title: String,
-    body: String,
-    link: String
+  title: String,
+  body: String,
+  link: String
 
 })
 
-const createPost = function(_title, _body){
+const createPost = function (_title, _body) {
 
   const title = _title;
   const body = _body;
@@ -48,29 +48,44 @@ const createPost = function(_title, _body){
 
 }
 
+var firstLaunch = true;
+
 var posts;
 
 app.get("/", (req, res) => {
 
-  Post.find((err, _posts)=>{
+  if (firstLaunch) {
 
-    if(err){
+    firstLaunch = false;
+    Post.find((err, _posts) => {
 
-      console.log(err);
+      if (err) {
 
-    }else{
+        console.log(err);
 
-      res.render("home.ejs", {
-        defaultTitle: "Welcome To Your Own Blog!",
-        defaultBody: "Welcome! Visit {yourblog}.com/compose to start creating your own posts!",
-        posts: _posts
-      });
-    
-      posts = _posts;
+      } else {
 
-    }
+        res.render("home.ejs", {
+          defaultTitle: "Welcome To Your Own Blog!",
+          defaultBody: "Welcome! Visit {yourblog}.com/compose to start creating your own posts!",
+          posts: _posts
+        });
 
-  })
+        posts = _posts;
+
+      }
+
+    })
+
+  } else {
+
+    res.render("home.ejs", {
+      defaultTitle: "Welcome To Your Own Blog!",
+      defaultBody: "Welcome! Visit {yourblog}.com/compose to start creating your own posts!",
+      posts: posts
+    });
+
+  }
 
 })
 
