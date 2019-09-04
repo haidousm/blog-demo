@@ -26,23 +26,37 @@ const Post = mongoose.model("Post", {
 
     title: String,
     body: String,
-    link: lodash.kebabCase(this.title)
+    link: String
 
 })
 
-const defaultPost = new Post({
+const createPost = function(_title, _body){
 
-    title: "Welcome To Your Own Blog!",
-    body: "Welcome! Visit {yourblog}.com/compose to start creating your own posts!",
-    link: lodash.kebabCase(this.title)
+  const title = _title;
+  const body = _body;
+  const link = lodash.kebabCase(_title);
 
-})
+  const newPost = new Post({
+
+    title: title,
+    body: body,
+    link: link
+
+  })
+
+  return newPost;
+
+}
+
+const defaultPost = createPost("Welcome To Your Own Blog!", "Welcome! Visit {yourblog}.com/compose to start creating your own posts!");
 
 Post.insertMany([defaultPost]);
 
+var posts;
+
 app.get("/", (req, res) => {
 
-  Post.find((err, posts)=>{
+  Post.find((err, _posts)=>{
 
     if(err){
 
@@ -51,8 +65,10 @@ app.get("/", (req, res) => {
     }else{
 
       res.render("home.ejs", {
-        posts: posts
+        posts: _posts
       });
+    
+      posts = _posts;
 
     }
 
