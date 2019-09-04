@@ -48,10 +48,6 @@ const createPost = function(_title, _body){
 
 }
 
-const defaultPost = createPost("Welcome To Your Own Blog!", "Welcome! Visit {yourblog}.com/compose to start creating your own posts!");
-
-Post.insertMany([defaultPost]);
-
 var posts;
 
 app.get("/", (req, res) => {
@@ -65,6 +61,8 @@ app.get("/", (req, res) => {
     }else{
 
       res.render("home.ejs", {
+        defaultTitle: "Welcome To Your Own Blog!",
+        defaultBody: "Welcome! Visit {yourblog}.com/compose to start creating your own posts!",
         posts: _posts
       });
     
@@ -118,13 +116,8 @@ app.get("/posts/:postTitle", (req, res) => {
 
 app.post("/compose", (req, res) => {
 
-  let post = {
-
-    title: req.body.postTitle,
-    body: req.body.postBody.substring(0, 100) + " ...",
-    link: lodash.kebabCase(req.body.postTitle)
-
-  }
+  let post = createPost(req.body.postTitle, req.body.postBody)
+  Post.insertMany([post])
 
   posts.push(post);
   res.redirect("/");

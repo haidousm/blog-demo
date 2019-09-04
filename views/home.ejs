@@ -1,6 +1,8 @@
 <%- include partials/header %>
+<h1><%=defaultTitle%></h1>
+<p><%=defaultBody%></p>
 <% posts.forEach(post => { %>
-    <h1><%=post.title%></h1>
-    <p><%=post.body%> <a class="post-link" href="/posts/<%=post.link%>">Full Post</a></p>
+<h1><%=post.title%></h1>
+<p><%=post.body.substring(0, 100) + " ..."%> <a class="post-link" href="/posts/<%=post.link%>">Full Post</a></p>
 <% }); %>
 <%- include partials/footer %>
