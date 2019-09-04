@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const ejs = require("ejs");
+const mongoose = require("mongoose");
 
 const lodash = require("lodash")
 
@@ -10,8 +10,6 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 const app = express();
 
-const posts = [];
-
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({
@@ -19,6 +17,24 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(express.static("public"));
+
+mongoose.connect("mongodb://localhost:27017/BlogDemoDB", {
+    useNewUrlParser: true
+});
+
+const Post = mongoose.model("Post", {
+
+    title: String,
+    body: String
+
+})
+
+const defaultPost = new Post({
+
+    title: "Welcome To Your Own Blog!",
+    body: "Welcome! Visit {yourblog}.com/compose to start creating your own posts!"
+
+})
 
 app.get("/", (req, res) => {
 
