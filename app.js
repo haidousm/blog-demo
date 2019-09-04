@@ -25,23 +25,38 @@ mongoose.connect("mongodb://localhost:27017/BlogDemoDB", {
 const Post = mongoose.model("Post", {
 
     title: String,
-    body: String
+    body: String,
+    link: lodash.kebabCase(this.title)
 
 })
 
 const defaultPost = new Post({
 
     title: "Welcome To Your Own Blog!",
-    body: "Welcome! Visit {yourblog}.com/compose to start creating your own posts!"
+    body: "Welcome! Visit {yourblog}.com/compose to start creating your own posts!",
+    link: lodash.kebabCase(this.title)
 
 })
 
+Post.insertMany([defaultPost]);
+
 app.get("/", (req, res) => {
 
-  res.render("home.ejs", {
-    homeStartingContent: homeStartingContent,
-    posts: posts
-  });
+  Post.find((err, posts)=>{
+
+    if(err){
+
+      console.log(err);
+
+    }else{
+
+      res.render("home.ejs", {
+        posts: posts
+      });
+
+    }
+
+  })
 
 })
 
