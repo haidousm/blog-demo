@@ -18,9 +18,9 @@ app.use(bodyParser.urlencoded({
 
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/BlogDemoDB", {
-  useNewUrlParser: true
-});
+// mongoose.connect("mongodb://localhost:27017/BlogDemoDB", {
+//   useNewUrlParser: true
+// });
 
 const Post = mongoose.model("Post", {
 
